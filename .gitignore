@@ -9,3 +9,5 @@ app/package-lock.json
 /Scripts/
 pyvenv.cfg
 /share/
+/API/lib/__pycache__/
+API/test.py
