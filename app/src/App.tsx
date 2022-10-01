@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+
 import { teal, yellow } from "@mui/material/colors";
 import {
     createTheme,
@@ -8,7 +9,7 @@ import {
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { SnackbarProvider } from "notistack";
 import { NavBar } from "./components/NavBar";
-
+import Webcam from "./components/CameraFrame"
 let theme = createTheme({
     palette: {
         primary: {
@@ -34,12 +35,22 @@ const App = () => {
     const [resultImage, setResultImage] = useState<string | undefined>(
         undefined
     );
+ 
     return (
         <BrowserRouter>
             <ThemeProvider theme={theme}>
                 <SnackbarProvider autoHideDuration={2000}>
-                    <NavBar />
-                        Hi World
+                    <NavBar/>
+                    <div style = {{
+                        height: "100%",
+                        width: "100%",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center"
+                    }}>
+                            <Webcam/>
+                   </div>                
+
                 </SnackbarProvider>
             </ThemeProvider>
         </BrowserRouter>
