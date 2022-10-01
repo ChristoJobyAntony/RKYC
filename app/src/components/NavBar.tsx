@@ -30,7 +30,7 @@ export function NavBar() {
                     sx={{ flexGrow: 1 }}
                     onClick={() => navigate("/")}
                 >
-                    PICASSO
+                    REMOTE KYC 
                 </Typography>
             </Toolbar>
         </AppBar>
