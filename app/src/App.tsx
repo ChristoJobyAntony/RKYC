@@ -8,6 +8,7 @@ import {
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { SnackbarProvider } from "notistack";
 import { NavBar } from "./components/NavBar";
+import Landing from "./components/Landing";
 
 let theme = createTheme({
     palette: {
@@ -39,7 +40,7 @@ const App = () => {
             <ThemeProvider theme={theme}>
                 <SnackbarProvider autoHideDuration={2000}>
                     <NavBar />
-                        Hi World
+                        <Landing/>
                 </SnackbarProvider>
             </ThemeProvider>
         </BrowserRouter>

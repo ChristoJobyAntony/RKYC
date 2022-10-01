@@ -4,7 +4,7 @@ import React from "react";
 
 const Landing = () => {
     return (
-        <div style = {{backgroundImage: "url(http://localhost:3000/KYC_img.jpg)"}}></div>
+        <div style = {{backgroundImage: "url(http://localhost:3000/KYC_bg_img.jpg)"}}></div>
     );
 }
 
