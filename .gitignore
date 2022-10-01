@@ -17,3 +17,6 @@ API/test.py
 /API/lib/voice_auth_model_cnn/
 API/lib/parameters.py
 /API/api/media
+API/api/lib/__pycache__/
+API/api/lib/data/embed/
+API/api/lib/voice_auth_model_cnn/

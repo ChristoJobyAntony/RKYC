@@ -1,6 +1,5 @@
 import shutil
 from uuid import uuid4
-import aiofiles
 from fastapi import FastAPI, Depends, HTTPException, status, Form, Security, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordRequestForm, SecurityScopes
@@ -8,10 +7,11 @@ from sqlalchemy.orm import Session
 
 from . import schema, curd, config
 from .database import Base, get_db, engine
-
+from .lib import face_orient,voice_verify
 Base.metadata.create_all(engine)
 
 app  = FastAPI()
+voiceEmbedder = voice_verify.VoiceVerifier(weight_dir=config.EMBED_PATH)
 
 origins = [
     "*"
@@ -55,8 +55,8 @@ def user_enroll_otp_verify (aadhaar_id: str, token:str,  otp:int, db:Session=Dep
 
 @app.post("/user/enroll/register")
 async def read_root(aadhaar_id:str, otp_token: str, video: UploadFile = File(), db=Depends(get_db), audio: UploadFile=File()):
-    video_path = config.VIDEO_PATH + uuid4().hex + ".mp4"
-    audio_path = config.AUDIO_PATH + uuid4().hex + ".wav"
+    video_path = config.VIDEO_PATH + aadhaar_id + ".mp4"
+    audio_path = config.AUDIO_PATH + aadhaar_id + ".wav"
     if video.content_type != "video/webm" :
         raise HTTPException(status_code=400, detail="Invalid Video File")
     if audio.content_type != "audio/wav" :
@@ -65,6 +65,9 @@ async def read_root(aadhaar_id:str, otp_token: str, video: UploadFile = File(), 
         shutil.copyfileobj(video.file, file_object) 
     with open(audio_path, "wb+") as file_object : 
         shutil.copyfileobj(audio.file, file_object)
+    voiceEmbedder.enroll(audio_path,aadhaar_id)
+    face_extractor = face_orient.FaceFile(video_path,save_path=config.FACE_PATH + aadhaar_id + ".png")
+    orientations = face_extractor.process_input()
     return {}
 
 @app.get("/test")

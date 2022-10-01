@@ -1,6 +1,8 @@
 BASE = "./api"
 VIDEO_PATH = BASE + "/media/video/"
 AUDIO_PATH = BASE + "/media/audio/"
+FACE_PATH = BASE + "/media/faces/"
+EMBED_PATH = BASE + "/media/voice_embed/"
 DB_CREDENTIALS = BASE + "/secrets/database.txt"
 TOKEN_VALIDITY_TIME = 60
 ACTOR_USER = "user"

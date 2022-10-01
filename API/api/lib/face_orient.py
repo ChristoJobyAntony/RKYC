@@ -6,10 +6,10 @@ import numpy as np
 import time
 
 mp_face_mesh = mp.solutions.face_mesh
-face_mesh = mp_face_mesh.FaceMesh(min_detection_confidence=0.5, min_tracking_confidence=0.5)
+face_mesh = mp_face_mesh.FaceMesh(min_detection_confidence=0.5, min_tracking_confidence=0.5, )
 
 class FaceFile():
-    def __init__(self,source : str, stable_length : int = 15, size : tuple = (800,450,),*args, **kwargs) -> None:
+    def __init__(self,source : str, stable_length : int = 15, size : tuple = (800,450,),save_path : str = r"face.png",*args, **kwargs) -> None:
         """Creates a single-use object to read in frames from a video file and return face orientation sequence
 
         Args:
@@ -18,6 +18,7 @@ class FaceFile():
             size (tuple, optional): Resize size for the video source. Defaults to (800,450,).
         """
         self.__source = cv2.VideoCapture(source)
+        self.save_path = save_path
         self.size = size
         self.stable_length = stable_length
         
@@ -28,6 +29,7 @@ class FaceFile():
             list: face orientations
         """
         outputs = []
+        face_verification_frame = False
         while self.__source.isOpened():
             success, image = self.__source.read()
             # Check if no frame was obtained
@@ -83,6 +85,10 @@ class FaceFile():
                 text = "U"
             else:
                 text = "F"
+            
+            if(x**2 + y**2 < 70 and not face_verification_frame):
+                face_verification_frame = True
+                cv2.imwrite(self.save_path,image)
             outputs.append(text)
         # Close the source
         self.__source.close()
