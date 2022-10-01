@@ -7,6 +7,7 @@ app/node_modules/
 app/package-lock.json
 /Lib/
 /Scripts/
+/Include/
 pyvenv.cfg
 /share/
 /API/lib/__pycache__/
