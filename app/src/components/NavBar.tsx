@@ -1,11 +1,9 @@
 import React from "react";
-
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import PaletteIcon from "@mui/icons-material/Palette";
 import { ChildFriendlyOutlined } from "@mui/icons-material";
 import { ThemeProvider, useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
@@ -17,23 +15,33 @@ export function NavBar() {
         <AppBar
             position="static"
             /*color="primary"*/
-            style={{
-                backgroundColor: "#ffdddd",
-            }}
-        >
+            >
             <Toolbar>
                 <Typography
-                    variant="h3"
-                    align="center"
+                    //variant="h3"
+                    fontSize={"55px"}
+                    align="right"
+                    fontFamily = "Courier"
                     component="div"
-                    color={theme.palette.info.light}
+                    color={"#fffafa"}
                     sx={{ flexGrow: 1 }}
                     onClick={() => navigate("/")}
                 >
-                    RKYC
-
+                    KYC 
+                </Typography>
+                <Typography
+                    align="left"
+                    fontSize={"25px"}
+                    fontFamily = "Courier"
+                    component="div"
+                    margin={"2px"}
+                    vertical-textAlign="bottom"
+                    color={"#ff8a65"}
+                    sx={{ flexGrow: 1 }}
+                    onClick={() => navigate("/")}
+                >
                 </Typography>
             </Toolbar>
-        </AppBar>
+            </AppBar>
     );
 }
