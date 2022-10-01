@@ -27,7 +27,6 @@ export function NavBar() {
                     sx={{ flexGrow: 1 }}
                     onClick={() => navigate("/")}
                 >
-<<<<<<< HEAD
                     KYC 
                 </Typography>
                 <Typography
@@ -41,11 +40,6 @@ export function NavBar() {
                     sx={{ flexGrow: 1 }}
                     onClick={() => navigate("/")}
                 >
-                    &nbsp;Unstringed
-=======
-                    RKYC
-
->>>>>>> 6e070165ba473b3dcc5dcc1b44df5d86e8eef584
                 </Typography>
             </Toolbar>
             </AppBar>

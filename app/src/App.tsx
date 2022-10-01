@@ -1,10 +1,6 @@
 import React, { useState } from "react";
-<<<<<<< HEAD
 import { grey, indigo, teal, lightBlue, deepPurple} from "@mui/material/colors";
-=======
 
-import { teal, deepPurple } from "@mui/material/colors";
->>>>>>> 6e070165ba473b3dcc5dcc1b44df5d86e8eef584
 import {
     createTheme,
     ThemeProvider,
@@ -22,11 +18,7 @@ let theme = createTheme({
     palette: {
         primary: {
             //   light: teal['A100'],
-<<<<<<< HEAD
             main: indigo["800"],
-=======
-            main: deepPurple["300"],
->>>>>>> 6e070165ba473b3dcc5dcc1b44df5d86e8eef584
         },
         secondary: {
             main: teal["A100"],
