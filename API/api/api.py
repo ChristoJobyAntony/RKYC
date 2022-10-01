@@ -1,4 +1,5 @@
 import shutil
+import os
 from uuid import uuid4
 from fastapi import FastAPI, Depends, HTTPException, status, Form, Security, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
@@ -61,8 +62,11 @@ async def user_enroll_register(aadhaar_id:str, otp_token: str, video: UploadFile
     otp_data = curd.get_otp(db,token=otp_token)
     if(otp_data.validated != True and otp_data.aadhaar_id == aadhaar_id):
         return HTTPException(status_code=498,detail="The given otp token is not validated")
-    video_path = config.VIDEO_PATH + aadhaar_id + ".webm"
-    audio_path = config.AUDIO_PATH + aadhaar_id + ".wav"
+    video_path = config.VIDEO_PATH + aadhaar_id + "-b" + ".webm"
+    audio_path = config.AUDIO_PATH + aadhaar_id + "-b" + ".wav"
+    video_path_fixed = config.VIDEO_PATH + aadhaar_id + ".webm"
+    audio_path_fixed = config.AUDIO_PATH + aadhaar_id + ".wav"
+    
     if video.content_type != "video/webm" :
         raise HTTPException(status_code=400, detail="Invalid Video File")
     if audio.content_type != "audio/wav" :
@@ -71,6 +75,10 @@ async def user_enroll_register(aadhaar_id:str, otp_token: str, video: UploadFile
         shutil.copyfileobj(video.file, file_object) 
     with open(audio_path, "wb+") as file_object : 
         shutil.copyfileobj(audio.file, file_object)
+    os.system(f"ffmpeg -i {video_path} {video_path_fixed}")
+    os.system(f"ffmpeg -i {audio_path} {audio_path_fixed}")
+    os.remove(video_path)
+    os.remove(audio_path)
     voiceEmbedder.enroll(audio_path,aadhaar_id)
     face_extractor = face_orient.FaceFile(video_path,save_path=config.FACE_PATH + aadhaar_id + ".png")
     orientations = face_extractor.process_input()
@@ -113,8 +121,10 @@ async def read_root(aadhaar_id:str, otp_token: str, video: UploadFile = File(), 
         return HTTPException(status_code=498,detail="The given otp token is not validated")
     if(user_data.is_enrolled != True):
         return HTTPException(status_code=498,detail="The given user is not enrolled")
-    video_path = config.VIDEO_COMPARE_PATH + aadhaar_id + ".webm"
-    audio_path = config.AUDIO_PATH + aadhaar_id + ".wav"
+    video_path = config.VIDEO_PATH + aadhaar_id + "-b" + ".webm"
+    audio_path = config.AUDIO_PATH + aadhaar_id + "-b" + ".wav"
+    video_path_fixed = config.VIDEO_PATH + aadhaar_id + ".webm"
+    audio_path_fixed = config.AUDIO_PATH + aadhaar_id + ".wav"
     if video.content_type != "video/webm" :
         raise HTTPException(status_code=400, detail="Invalid Video File")
     if audio.content_type != "audio/wav" :
@@ -123,6 +133,10 @@ async def read_root(aadhaar_id:str, otp_token: str, video: UploadFile = File(), 
         shutil.copyfileobj(video.file, file_object) 
     with open(audio_path, "wb+") as file_object : 
         shutil.copyfileobj(audio.file, file_object)
+    os.system(f"ffmpeg -i {video_path} {video_path_fixed}")
+    os.system(f"ffmpeg -i {audio_path} {audio_path_fixed}")
+    os.remove(video_path)
+    os.remove(audio_path)
     voice_score = voiceEmbedder.compare(audio_path,aadhaar_id)
     face_extractor = face_orient.FaceFile(video_path,save_path=config.FACE_COMPARE_PATH + aadhaar_id + ".png")
     orientations = face_extractor.process_input()
