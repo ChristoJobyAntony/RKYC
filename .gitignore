@@ -15,3 +15,4 @@ API/test.py
 /API/lib/unused/
 /API/lib/data/
 /API/lib/voice_auth_model_cnn/
+API/lib/parameters.py

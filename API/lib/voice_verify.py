@@ -2,6 +2,9 @@ from turtle import distance
 import scipy.io.wavfile as wavfile
 import traceback as tb
 import os
+
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3' 
+
 import sys
 import numpy as np
 import pandas as pd
@@ -9,10 +12,13 @@ from scipy.spatial.distance import cdist, euclidean, cosine
 import warnings
 from keras.models import load_model
 import os
-import parameters as p
-from feature_extraction import get_embedding, get_embeddings_from_list_file
-from preprocess import get_fft_spectrum
+import lib.parameters as p
+from lib.feature_extraction import get_embedding, get_embeddings_from_list_file
+from lib.preprocess import get_fft_spectrum
+import logging
+
 model = load_model(p.MODEL_FILE)
+
 
 class VoiceVerifier():
     def __init__(self, weight_dir : str = p.EMBED_LIST_FILE) -> None:
@@ -31,4 +37,4 @@ class VoiceVerifier():
         compare_sample = get_embedding(self.model, fp, p.MAX_SEC)
         test_embs = np.array(compare_sample.tolist())
         distance = euclidean(test_embs, enroll_embs)
-        return distance < p.THRESHOLD
+        return distance

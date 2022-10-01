@@ -10,12 +10,12 @@ BUCKET_STEP = 1
 MAX_SEC = 10
 
 # Model
-MODEL_FILE = "voice_auth_model_cnn"
+MODEL_FILE = "lib/voice_auth_model_cnn"
 COST_METRIC = "cosine"  # euclidean or cosine
 INPUT_SHAPE=(NUM_FFT,None,1)
 
 # IO
-EMBED_LIST_FILE = "data/embed"
+EMBED_LIST_FILE = "lib/data/embed"
 
 # Recognition
 THRESHOLD = 0.35
