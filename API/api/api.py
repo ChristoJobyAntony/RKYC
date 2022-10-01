@@ -7,11 +7,12 @@ from sqlalchemy.orm import Session
 
 from . import schema, curd, config
 from .database import Base, get_db, engine
-from .lib import face_orient,voice_verify
+from .lib import face_orient,voice_verify,face_verify
 Base.metadata.create_all(engine)
 
 app  = FastAPI()
 voiceEmbedder = voice_verify.VoiceVerifier(weight_dir=config.EMBED_PATH)
+faceVerifier = face_verify.FaceVerifier()
 
 origins = [
     "*"
@@ -60,7 +61,7 @@ async def user_enroll_register(aadhaar_id:str, otp_token: str, video: UploadFile
     otp_data = curd.get_otp(db,token=otp_token)
     if(otp_data.validated != True and otp_data.aadhaar_id == aadhaar_id):
         return HTTPException(status_code=498,detail="The given otp token is not validated")
-    video_path = config.VIDEO_PATH + aadhaar_id + ".mp4"
+    video_path = config.VIDEO_PATH + aadhaar_id + ".webm"
     audio_path = config.AUDIO_PATH + aadhaar_id + ".wav"
     if video.content_type != "video/webm" :
         raise HTTPException(status_code=400, detail="Invalid Video File")
@@ -112,7 +113,7 @@ async def read_root(aadhaar_id:str, otp_token: str, video: UploadFile = File(), 
         return HTTPException(status_code=498,detail="The given otp token is not validated")
     if(user_data.is_enrolled != True):
         return HTTPException(status_code=498,detail="The given user is not enrolled")
-    video_path = config.VIDEO_COMPARE_PATH + aadhaar_id + ".mp4"
+    video_path = config.VIDEO_COMPARE_PATH + aadhaar_id + ".webm"
     audio_path = config.AUDIO_PATH + aadhaar_id + ".wav"
     if video.content_type != "video/webm" :
         raise HTTPException(status_code=400, detail="Invalid Video File")
@@ -125,4 +126,5 @@ async def read_root(aadhaar_id:str, otp_token: str, video: UploadFile = File(), 
     voice_score = voiceEmbedder.compare(audio_path,aadhaar_id)
     face_extractor = face_orient.FaceFile(video_path,save_path=config.FACE_COMPARE_PATH + aadhaar_id + ".png")
     orientations = face_extractor.process_input()
-    return {}
+    face_score = faceVerifier.compare(config.FACE_COMPARE_PATH + aadhaar_id + ".png",config.FACE_PATH + aadhaar_id + ".png")
+    return {"voice_score" : voice_score, "face_score" : face_score}
