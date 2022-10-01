@@ -1,3 +1,4 @@
 /API/api/secrets
 API/api/__pycache__
 env/
+/API/lib/Voice-Authentication-CNN/
