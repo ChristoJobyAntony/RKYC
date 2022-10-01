@@ -33,6 +33,8 @@ def user_available (aadhaar_id: str, db:Session = Depends(get_db)) :
     
 @app.post("/user/enroll/otp/issue", response_model=schema.OTPBase)
 def user_enroll_otp_issue (aadhaar_id: str, db:Session=Depends(get_db)) :
+    if(curd.get_user(db, aadhaar_id=aadhaar_id) == None):
+        return HTTPException(status_code=400, detail="Invalid user")
     t = curd.issue_otp(db, aadhaar_id, config.OTP_ENROLL)
     t =  curd.get_otp(db, t)
     print(t.timestamp)
@@ -55,6 +57,9 @@ def user_enroll_otp_verify (aadhaar_id: str, token:str,  otp:int, db:Session=Dep
 
 @app.post("/user/enroll/register")
 async def read_root(aadhaar_id:str, otp_token: str, video: UploadFile = File(), db=Depends(get_db), audio: UploadFile=File()):
+    otp_data = curd.get_otp(db,token=otp_token)
+    if(otp_data.validated != True and otp_data.aadhaar_id == aadhaar_id):
+        return HTTPException(status_code=498,detail="The given otp token is not validated")
     video_path = config.VIDEO_PATH + aadhaar_id + ".mp4"
     audio_path = config.AUDIO_PATH + aadhaar_id + ".wav"
     if video.content_type != "video/webm" :
@@ -68,6 +73,7 @@ async def read_root(aadhaar_id:str, otp_token: str, video: UploadFile = File(), 
     voiceEmbedder.enroll(audio_path,aadhaar_id)
     face_extractor = face_orient.FaceFile(video_path,save_path=config.FACE_PATH + aadhaar_id + ".png")
     orientations = face_extractor.process_input()
+    curd.verify_enroll(db,aadhaar_id)
     return {}
 
 @app.get("/test")
