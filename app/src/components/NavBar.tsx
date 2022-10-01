@@ -16,9 +16,9 @@ export function NavBar() {
     return (
         <AppBar
             position="static"
-            color="primary"
+            /*color="primary"*/
             style={{
-                backgroundColor: "rgba(0,0,0, 0.4)",
+                backgroundColor: "#ffdddd",
             }}
         >
             <Toolbar>
@@ -26,11 +26,12 @@ export function NavBar() {
                     variant="h3"
                     align="center"
                     component="div"
-                    color={theme.palette.secondary.main}
+                    color={theme.palette.info.light}
                     sx={{ flexGrow: 1 }}
                     onClick={() => navigate("/")}
                 >
-                    REMOTE KYC 
+                    RKYC
+
                 </Typography>
             </Toolbar>
         </AppBar>
