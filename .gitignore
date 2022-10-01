@@ -5,3 +5,7 @@ env/
 app/build/
 app/node_modules/
 app/package-lock.json
+/Lib/
+/Scripts/
+pyvenv.cfg
+/share/
