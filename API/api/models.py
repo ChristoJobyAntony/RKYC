@@ -24,7 +24,11 @@ class OTP (Base) :
     validated = Column(Boolean, nullable=False, default=False)
     timestamp = Column(DateTime(timezone=True), default=datetime.datetime.utcnow)
 
-
+class Organisation(Base):
+    __tablename__ = "organisations"
+    uid = Column(String(length=36), primary_key=True)
+    name = Column(String(length=30), nullable=False)
+    trusted = Column(Boolean, nullable=False, default=False)
 
 
 # class EnrolledUser (Base) :
