@@ -30,7 +30,8 @@ export function NavBar() {
                     sx={{ flexGrow: 1 }}
                     onClick={() => navigate("/")}
                 >
-                    REMOTE KYC 
+                    RKYC
+
                 </Typography>
             </Toolbar>
         </AppBar>
