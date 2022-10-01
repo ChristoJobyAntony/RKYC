@@ -2,3 +2,6 @@
 API/api/__pycache__
 env/
 /API/lib/Voice-Authentication-CNN/
+app/build/
+app/node_modules/
+app/package-lock.json
