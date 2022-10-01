@@ -1,0 +1,26 @@
+.carousel {
+    overflow:  hidden;
+    height: 100%;
+    box-shadow : 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+.inner {
+    white-space: nowrap;
+    transition: transform 0.3s;
+    height: 100%;
+    width: 100%;
+}
+
+
+.carousel-item {
+    display: inline-block;
+    height: 100%;
+    width: 100%;
+    vertical-align: top;
+    background-color: white;
+    /* border-radius: 10px; */
+}
+
+.carousel-item .MuiTypography-root {
+    white-space: normal;
+}

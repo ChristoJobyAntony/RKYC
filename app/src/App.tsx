@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 
-import { teal, deepPurple } from "@mui/material/colors";
+import { teal, brown } from "@mui/material/colors";
 import {
     createTheme,
     ThemeProvider,
@@ -13,12 +13,14 @@ import { NavBar } from "./components/NavBar";
 import Webcam from "./components/CameraFrame"
 import Landing from "./landing/Landing";
 import CameraFrame from "./components/CameraFrame";
+import Enroll from "./enroll/Enroll";
 
 let theme = createTheme({
     palette: {
         primary: {
-            //   light: teal['A100'],
-            main: deepPurple["300"],
+            contrastText: brown['100'],
+            main: brown["900"],
+            light: brown['200'],
         },
         secondary: {
             main: teal["A100"],
@@ -47,7 +49,7 @@ const App = () => {
                     <NavBar/>
                     <Routes>
                         <Route index element={<Landing/>}/>
-                        <Route path="/enroll" element={<CameraFrame/>} />
+                        <Route path="/enroll" element={<Enroll/>} />
                     </Routes>
                 </SnackbarProvider>
             </ThemeProvider>
