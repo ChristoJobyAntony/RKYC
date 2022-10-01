@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 
 
-class Verifier():
+class FaceVerifier():
     def __init__(self, threshold : float = 0.35) -> None:
         """A helper class to hold the methods required for face authentication
 
