@@ -1,5 +1,7 @@
-from unittest import result
-from fastapi import FastAPI, Depends, HTTPException, status, Form, Security
+import shutil
+from uuid import uuid4
+import aiofiles
+from fastapi import FastAPI, Depends, HTTPException, status, Form, Security, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordRequestForm, SecurityScopes
 from sqlalchemy.orm import Session
@@ -52,7 +54,17 @@ def user_enroll_otp_verify (aadhaar_id: str, token:str,  otp:int, db:Session=Dep
     }
 
 @app.post("/user/enroll/register")
-def read_root(token: str):
+async def read_root(aadhaar_id:str, otp_token: str, video: UploadFile = File(), db=Depends(get_db), audio: UploadFile=File()):
+    video_path = config.VIDEO_PATH + uuid4().hex + ".mp4"
+    audio_path = config.AUDIO_PATH + uuid4().hex + ".wav"
+    if video.content_type != "video/webm" :
+        raise HTTPException(status_code=400, detail="Invalid Video File")
+    if audio.content_type != "audio/wav" :
+        raise HTTPException(status_code=400, detail="Invalid Audio File")
+    with open(video_path, "wb+") as file_object:
+        shutil.copyfileobj(video.file, file_object) 
+    with open(audio_path, "wb+") as file_object : 
+        shutil.copyfileobj(audio.file, file_object)
     return {}
 
 @app.get("/test")

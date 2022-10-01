@@ -12,34 +12,30 @@ export function NavBar() {
     const theme = useTheme();
     const navigate = useNavigate();
     return (
-        <AppBar
-            position="static"
-            /*color="primary"*/
-            >
+        <AppBar>
             <Toolbar>
                 <Typography
-                    //variant="h3"
-                    fontSize={"55px"}
-                    align="right"
-                    fontFamily = "Courier"
-                    component="div"
-                    color={"#fffafa"}
-                    sx={{ flexGrow: 1 }}
-                    onClick={() => navigate("/")}
-                >
-                    KYC 
-                </Typography>
-                <Typography
+                    color = {theme.palette.primary.contrastText}
+                    variant="h4"
                     align="left"
-                    fontSize={"25px"}
-                    fontFamily = "Courier"
                     component="div"
-                    margin={"2px"}
-                    vertical-textAlign="bottom"
-                    color={"#ff8a65"}
                     sx={{ flexGrow: 1 }}
                     onClick={() => navigate("/")}
                 >
+                    Remote KYC
+                </Typography>
+                
+                <Typography color={"white"}>
+                    <Button variant="text" color="inherit" sx={{margin: "10px"}}>
+                        Enroll
+                    </Button>
+                </Typography>
+
+                <Typography color={"white"}>
+                    <Button variant="text" color="inherit" sx={{margin: "10px"}}>
+                        Verify
+                    </Button>
+                    
                 </Typography>
             </Toolbar>
             </AppBar>
