@@ -12,3 +12,6 @@ pyvenv.cfg
 /share/
 /API/lib/__pycache__/
 API/test.py
+/API/lib/unused/
+/API/lib/data/
+/API/lib/voice_auth_model_cnn/
