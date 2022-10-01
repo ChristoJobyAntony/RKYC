@@ -41,10 +41,10 @@ body {
 
 #bg-image {
       /* The image used */
-    
+      background-image: url("KYC_img.jpg");
       /* Add the blur effect */
-      filter: blur(8px);
-      -webkit-filter: blur(8px);
+      /* filter: blur(2px);
+      -webkit-filter: blur(2px); */
     
       /* Full height */
       height: 100%;
