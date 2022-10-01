@@ -1,11 +1,9 @@
 import React from "react";
-
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
-import PaletteIcon from "@mui/icons-material/Palette";
 import { ChildFriendlyOutlined } from "@mui/icons-material";
 import { ThemeProvider, useTheme } from "@mui/material/styles";
 import { useNavigate } from "react-router-dom";
@@ -37,8 +35,9 @@ export function NavBar() {
                     <Button variant="text" color="inherit" sx={{margin: "10px"}}>
                         Verify
                     </Button>
+                    
                 </Typography>
             </Toolbar>
-        </AppBar>
+            </AppBar>
     );
 }

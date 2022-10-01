@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { grey, indigo, teal, lightBlue, deepPurple} from "@mui/material/colors";
 
 import { teal, brown } from "@mui/material/colors";
 import {
@@ -21,6 +22,7 @@ let theme = createTheme({
             contrastText: brown['100'],
             main: brown["900"],
             light: brown['200'],
+
         },
         secondary: {
             main: teal["A100"],
