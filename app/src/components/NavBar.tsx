@@ -17,21 +17,28 @@ export function NavBar() {
         <AppBar
             position="static"
             /*color="primary"*/
-            style={{
-                backgroundColor: "#ffdddd",
-            }}
         >
             <Toolbar>
                 <Typography
-                    variant="h3"
-                    align="center"
+                    variant="h4"
+                    align="left"
                     component="div"
-                    color={theme.palette.info.light}
                     sx={{ flexGrow: 1 }}
                     onClick={() => navigate("/")}
                 >
-                    RKYC
+                    Remote KYC
+                </Typography>
+                
+                <Typography color={"white"}>
+                    <Button variant="text" color="inherit" sx={{margin: "10px"}}>
+                        Enroll
+                    </Button>
+                </Typography>
 
+                <Typography color={"white"}>
+                    <Button variant="text" color="inherit" sx={{margin: "10px"}}>
+                        Verify
+                    </Button>
                 </Typography>
             </Toolbar>
         </AppBar>
