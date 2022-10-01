@@ -7,7 +7,7 @@ from .config import *
 
 user, password, port, db = open(DB_CREDENTIALS).read().split(":")
 
-engine = sqlalchemy.create_engine(f"mariadb+mariadbconnector://{user}:{password}@localhost:{port}/{db}", pool_pre_ping=True)
+engine = sqlalchemy.create_engine(f"mysql+pymysql://{user}:{password}@localhost:{port}/{db}", pool_pre_ping=True)
 
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 

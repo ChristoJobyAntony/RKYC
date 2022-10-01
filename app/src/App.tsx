@@ -9,7 +9,9 @@ import {
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { SnackbarProvider } from "notistack";
 import { NavBar } from "./components/NavBar";
+
 import Webcam from "./components/CameraFrame"
+
 let theme = createTheme({
     palette: {
         primary: {
@@ -50,6 +52,7 @@ const App = () => {
                     }}>
                             <Webcam/>
                    </div>                
+
 
                 </SnackbarProvider>
             </ThemeProvider>
