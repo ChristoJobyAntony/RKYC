@@ -14,6 +14,7 @@ class User (Base) :
     age = Column(Integer)
     phone = Column(String(length=10), nullable=False) 
     marital_Status = Column(String(length=10), nullable=False) # Single, Married
+    is_enrolled = Column(Boolean, nullable=False, default=False)
 
 class OTP (Base) :
     __tablename__ = "otp"
