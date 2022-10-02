@@ -127,7 +127,8 @@ def user_enroll_otp_verify (aadhaar_id: str, token:str,  otp:int, db:Session=Dep
     curd.verify_otp(db, token)
     curd.issue_verify_attempt(db,aadhaar_id,seq,token)
     return {
-        "result": True
+        "result": True,
+        "sequence" : seq
     }
 
 @app.post("/user/verify/authenticate")
