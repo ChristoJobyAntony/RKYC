@@ -466,7 +466,7 @@ export default function Enroll() {
                                                             startRecording();
                                                             setInterval(
                                                                 stopRecording,
-                                                                10000
+                                                                4000
                                                             );
                                                         }}
                                                         variant="contained"
@@ -503,7 +503,7 @@ export default function Enroll() {
                                                                 startRecording();
                                                                 setInterval(
                                                                     stopRecording,
-                                                                    10000
+                                                                    4000
                                                                 );
                                                             }}
                                                             variant="contained"
