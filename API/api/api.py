@@ -36,8 +36,9 @@ def user_available (aadhaar_id: str, db:Session = Depends(get_db)) :
     
 @app.post("/user/enroll/otp/issue", response_model=schema.OTPBase)
 def user_enroll_otp_issue (aadhaar_id: str, db:Session=Depends(get_db)) :
-    if(curd.get_user(db, aadhaar_id=aadhaar_id) == None):
-        return HTTPException(status_code=400, detail="Invalid user")
+    user = curd.get_user(db, aadhaar_id=aadhaar_id)
+    if(user == None or user.is_enrolled):
+        raise HTTPException(status_code=400, detail="Invalid user")
     t = curd.issue_otp(db, aadhaar_id, config.OTP_ENROLL)
     t =  curd.get_otp(db, t)
     print(t.timestamp)
@@ -62,7 +63,7 @@ def user_enroll_otp_verify (aadhaar_id: str, token:str,  otp:int, db:Session=Dep
 async def user_enroll_register(aadhaar_id:str=Form(), otp_token:str=Form(), video: UploadFile = File(), audio: UploadFile=File(), db=Depends(get_db)):
     otp_data = curd.get_otp(db,token=otp_token)
     if(otp_data.validated != True and otp_data.aadhaar_id == aadhaar_id):
-        return HTTPException(status_code=498,detail="The given otp token is not validated")
+        raise HTTPException(status_code=498,detail="The given otp token is not validated")
     video_path = config.VIDEO_PATH + aadhaar_id + "-b" + ".webm"
     audio_path = config.AUDIO_PATH + aadhaar_id + "-b" + ".wav"
     video_path_fixed = config.VIDEO_PATH + aadhaar_id + ".webm"
@@ -95,8 +96,9 @@ def delete (db=Depends(get_db)) :
 @app.post("/user/verify/otp/issue", response_model=schema.OTPBase)
 def user_enroll_otp_issue (aadhaar_id: str, db:Session=Depends(get_db)) :
     # Verification OTP
-    if(curd.get_user(db, aadhaar_id=aadhaar_id) == None):
-        return HTTPException(status_code=400, detail="Invalid user")
+    user = curd.get_user(db, aadhaar_id=aadhaar_id)
+    if(user == None or not user.is_enrolled):
+        raise HTTPException(status_code=400, detail="Invalid user")
     t = curd.issue_otp(db, aadhaar_id, config.OTP_VERIFY)
     t =  curd.get_otp(db, t)
     print(t.timestamp)
@@ -121,9 +123,9 @@ async def read_root(aadhaar_id:str=Form(), otp_token:str=Form(), video: UploadFi
     otp_data = curd.get_otp(db,token=otp_token)
     user_data = curd.get_user(db,aadhaar_id=aadhaar_id)
     if(otp_data.validated != True and otp_data.aadhaar_id == aadhaar_id):
-        return HTTPException(status_code=498,detail="The given otp token is not validated")
+        raise HTTPException(status_code=498,detail="The given otp token is not validated")
     if(user_data.is_enrolled != True):
-        return HTTPException(status_code=498,detail="The given user is not enrolled")
+        raise HTTPException(status_code=498,detail="The given user is not enrolled")
     video_path = config.VIDEO_PATH + aadhaar_id + "-b" + ".webm"
     audio_path = config.AUDIO_PATH + aadhaar_id + "-b" + ".wav"
     video_path_fixed = config.VIDEO_PATH + aadhaar_id + ".webm"

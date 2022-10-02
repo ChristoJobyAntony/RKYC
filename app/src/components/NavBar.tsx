@@ -12,7 +12,7 @@ export function NavBar() {
     const theme = useTheme();
     const navigate = useNavigate();
     return (
-        <AppBar>
+        <AppBar position="static">
             <Toolbar>
                 <Typography
                     color = {theme.palette.primary.contrastText}
