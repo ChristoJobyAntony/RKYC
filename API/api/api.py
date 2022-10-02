@@ -124,7 +124,7 @@ def user_enroll_otp_verify (aadhaar_id: str, token:str,  otp:int, db:Session=Dep
         "result": True
     }
 
-@app.post("/user/verify/verify")
+@app.post("/user/verify/authenticate")
 async def read_root(aadhaar_id:str=Form(), otp_token:str=Form(), video: UploadFile = File(), db=Depends(get_db), audio: UploadFile=File()):
     otp_data = curd.get_otp(db,token=otp_token)
     user_data = curd.get_user(db,aadhaar_id=aadhaar_id)
