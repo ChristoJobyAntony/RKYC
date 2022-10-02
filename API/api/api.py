@@ -76,8 +76,8 @@ async def user_enroll_register(aadhaar_id:str=Form(), otp_token:str=Form(), vide
         shutil.copyfileobj(video.file, file_object) 
     with open(audio_path, "wb+") as file_object : 
         shutil.copyfileobj(audio.file, file_object)
-    os.system(f"ffmpeg -i {video_path} {video_path_fixed}")
-    os.system(f"ffmpeg -i {audio_path} {audio_path_fixed}")
+    os.system(f"ffmpeg -y -i {video_path} {video_path_fixed}")
+    os.system(f"ffmpeg -y -i {audio_path} {audio_path_fixed}")
     os.remove(video_path)
     os.remove(audio_path)
     video_path = video_path_fixed
@@ -136,8 +136,8 @@ async def read_root(aadhaar_id:str=Form(), otp_token:str=Form(), video: UploadFi
         shutil.copyfileobj(video.file, file_object) 
     with open(audio_path, "wb+") as file_object : 
         shutil.copyfileobj(audio.file, file_object)
-    os.system(f"ffmpeg -i {video_path} {video_path_fixed}")
-    os.system(f"ffmpeg -i {audio_path} {audio_path_fixed}")
+    os.system(f"ffmpeg -y -i {video_path} {video_path_fixed}")
+    os.system(f"ffmpeg -y -i {audio_path} {audio_path_fixed}")
     os.remove(video_path)
     os.remove(audio_path)
     video_path = video_path_fixed
