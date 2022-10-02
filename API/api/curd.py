@@ -37,3 +37,15 @@ def verify_enroll (db: Session, aadhaar_id: str):
     user = get_user(db,aadhaar_id)
     user.is_enrolled = True
     db.commit()
+
+def issue_verify_attempt(db : Session, aadhaar_id : str,sequence : str, token : str):
+    db.query(models.Verify).filter(models.Verify.aadhaar_id == aadhaar_id).delete()
+    db.add(models.Verify(
+        token=token,
+        aadhaar_id=aadhaar_id,
+        sequence = sequence
+    ))
+    db.commit()
+
+def get_verify (db: Session, token: str) -> models.Verify:
+    return db.query(models.Verify).filter(models.Verify.token == token).first()

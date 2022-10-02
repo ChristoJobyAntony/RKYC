@@ -2,10 +2,12 @@ from ast import For
 import shutil
 import os
 from uuid import uuid4
+from webbrowser import get
 from fastapi import FastAPI, Depends, HTTPException, status, Form, Security, UploadFile, File
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordRequestForm, SecurityScopes
 from sqlalchemy.orm import Session
+from random import choice
 
 from . import schema, curd, config
 from .database import Base, get_db, engine
@@ -107,6 +109,9 @@ def user_enroll_otp_issue (aadhaar_id: str, db:Session=Depends(get_db)) :
 @app.get("/user/verify/otp/verify", response_model=schema.Result) 
 def user_enroll_otp_verify (aadhaar_id: str, token:str,  otp:int, db:Session=Depends(get_db)) :
     t = curd.get_otp(db, token)
+    choices = ["L","R",]
+    seq = [choice(choices) for i in range(3)] + ["F",]
+    seq = "".join(seq)
     if (not t) : 
         raise HTTPException(status_code=400, detail="The token is expired or not found !")
     if (t.aadhaar_id != aadhaar_id) :
@@ -114,6 +119,7 @@ def user_enroll_otp_verify (aadhaar_id: str, token:str,  otp:int, db:Session=Dep
     if (otp != t.otp) :
         raise HTTPException(status_code=400, detail="Invalid OTP")
     curd.verify_otp(db, token)
+    curd.issue_verify_attempt(db,aadhaar_id,seq,token)
     return {
         "result": True
     }
@@ -122,6 +128,7 @@ def user_enroll_otp_verify (aadhaar_id: str, token:str,  otp:int, db:Session=Dep
 async def read_root(aadhaar_id:str=Form(), otp_token:str=Form(), video: UploadFile = File(), db=Depends(get_db), audio: UploadFile=File()):
     otp_data = curd.get_otp(db,token=otp_token)
     user_data = curd.get_user(db,aadhaar_id=aadhaar_id)
+    attempt_data = curd.get_verify(db,token=otp_token)
     if(otp_data.validated != True and otp_data.aadhaar_id == aadhaar_id):
         raise HTTPException(status_code=498,detail="The given otp token is not validated")
     if(user_data.is_enrolled != True):
@@ -148,4 +155,21 @@ async def read_root(aadhaar_id:str=Form(), otp_token:str=Form(), video: UploadFi
     face_extractor = face_orient.FaceFile(video_path,save_path=config.FACE_COMPARE_PATH + aadhaar_id + ".png")
     orientations = face_extractor.process_input()
     face_score = faceVerifier.compare(config.FACE_COMPARE_PATH + aadhaar_id + ".png",config.FACE_PATH + aadhaar_id + ".png")
-    return {"voice_score" : voice_score, "face_score" : face_score}
+    if(face_score and voice_score):
+        if(face_score > 0.27 and voice_score > 0.027):
+            result = "Passed"
+            is_verify = True
+            confidence_score = (face_score + voice_score*10)/2
+        else:
+            result = "Failed"
+            is_verify = False
+            confidence_score = (face_score + voice_score*10)/2
+    else:
+        result = "Failed"
+        is_verify = False
+        confidence_score = 100
+    attempt_data.verified = is_verify
+    attempt_data.confidence_score = confidence_score
+    print("Confidence score:",confidence_score)
+    db.commit()
+    return {"result" : result}

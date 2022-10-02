@@ -31,6 +31,14 @@ class Organisation(Base):
     name = Column(String(length=30), nullable=False)
     trusted = Column(Boolean, nullable=False, default=False)
 
+class Verify (Base) :
+    __tablename__ = "verify"
+    token = Column(String(length=36), primary_key=True)
+    aadhaar_id  = Column(String(length=12), ForeignKey("users.aadhaar_id"), nullable=False)
+    sequence = Column(String(length=4))
+    confidence_score = Column(Float,default=100.000)
+    verified = Column(Boolean, nullable=False, default=False)
+    timestamp = Column(DateTime(timezone=True), default=datetime.datetime.utcnow)
 
 # class EnrolledUser (Base) :
 #     __tablename__ = "enrolled_users"
