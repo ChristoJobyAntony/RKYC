@@ -12,6 +12,7 @@ import { NavBar } from "./components/NavBar";
 import Landing from "./landing/Landing";
 import CameraFrame from "./components/CameraFrame";
 import Enroll from "./enroll/Enroll";
+import Verify from "./verify/Verify";
 
 let theme = createTheme({
     palette: {
@@ -48,6 +49,7 @@ const App = () => {
                     <Routes>
                         <Route index element={<Landing />} />
                         <Route path="/enroll" element={<Enroll />} />
+                        <Route path="/verify" element={<Verify />} />
                         <Route path="/test" element={<CameraFrame />} />
                     </Routes>
                 </SnackbarProvider>

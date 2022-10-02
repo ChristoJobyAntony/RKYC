@@ -26,13 +26,13 @@ export function NavBar() {
                 </Typography>
                 
                 <Typography color={"white"}>
-                    <Button variant="text" color="inherit" sx={{margin: "10px"}}>
+                    <Button variant="text" color="inherit" sx={{margin: "10px"}} onClick={() => navigate("/enroll")}>
                         Enroll
                     </Button>
                 </Typography>
 
                 <Typography color={"white"}>
-                    <Button variant="text" color="inherit" sx={{margin: "10px"}}>
+                    <Button variant="text" color="inherit" sx={{margin: "10px"}} onClick={()=> navigate("/verify")}>
                         Verify
                     </Button>
                     

@@ -36,12 +36,13 @@ def user_available (aadhaar_id: str, db:Session = Depends(get_db)) :
         "result" : False if curd.get_user(db, aadhaar_id=aadhaar_id)  == None else True
     }
     
-@app.post("/user/enrolled", response_model=schema.Result)
+@app.get("/user/enrolled", response_model=schema.Result)
 def user_enrolled (aadhaar_id:str, db:Session=Depends(get_db)):
     user = curd.get_user(db, aadhaar_id=aadhaar_id)
     return {
         "result" : False if  not user or not user.is_enrolled else True
     }
+
 @app.post("/user/enroll/otp/issue", response_model=schema.OTPBase)
 def user_enroll_otp_issue (aadhaar_id: str, db:Session=Depends(get_db)) :
     user = curd.get_user(db, aadhaar_id=aadhaar_id)
