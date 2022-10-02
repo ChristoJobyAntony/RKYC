@@ -1,7 +1,12 @@
+from msilib import sequence
 from pydantic import BaseModel
 
 class Result (BaseModel) :
     result: bool
+
+class VerificationResult (BaseModel) :
+    result: bool
+    sequence: str
 
 class UserBase (BaseModel) :
     aadhaar_id: str
