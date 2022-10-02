@@ -36,6 +36,12 @@ def user_available (aadhaar_id: str, db:Session = Depends(get_db)) :
         "result" : False if curd.get_user(db, aadhaar_id=aadhaar_id)  == None else True
     }
     
+@app.post("/user/enrolled", response_class=schema.Result)
+def user_enrolled (aadhaar_id:str, db:Session=Depends(get_db)):
+    user = curd.get_user(db, aadhaar_id=aadhaar_id)
+    return {
+        "result" : False if  not user or not user.is_enrolled else True
+    }
 @app.post("/user/enroll/otp/issue", response_model=schema.OTPBase)
 def user_enroll_otp_issue (aadhaar_id: str, db:Session=Depends(get_db)) :
     user = curd.get_user(db, aadhaar_id=aadhaar_id)
@@ -106,7 +112,7 @@ def user_enroll_otp_issue (aadhaar_id: str, db:Session=Depends(get_db)) :
     print(t.timestamp)
     return t
 
-@app.get("/user/verify/otp/verify", response_model=schema.Result) 
+@app.post("/user/verify/otp/verify", response_model=schema.Result) 
 def user_enroll_otp_verify (aadhaar_id: str, token:str,  otp:int, db:Session=Depends(get_db)) :
     t = curd.get_otp(db, token)
     choices = ["L","R",]
