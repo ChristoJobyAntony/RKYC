@@ -171,5 +171,6 @@ async def read_root(aadhaar_id:str=Form(), otp_token:str=Form(), video: UploadFi
     attempt_data.verified = is_verify
     attempt_data.confidence_score = confidence_score
     print("Confidence score:",confidence_score)
+    print(face_score, voice_score,orientations)
     db.commit()
     return {"result" : result}
