@@ -125,7 +125,7 @@ export default function Enroll() {
     }, [webcamRef, setCapturing, mediaRecorderRef]);
 
     const handleDataAvailable = React.useCallback(
-        ({ data }) => {
+        ({ data }:any) => {
             if (data.size > 0) {
                 setRecordedChunks((prev) => prev.concat(data));
             }
