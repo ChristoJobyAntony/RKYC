@@ -36,7 +36,7 @@ def user_available (aadhaar_id: str, db:Session = Depends(get_db)) :
         "result" : False if curd.get_user(db, aadhaar_id=aadhaar_id)  == None else True
     }
     
-@app.post("/user/enrolled", response_class=schema.Result)
+@app.post("/user/enrolled", response_model=schema.Result)
 def user_enrolled (aadhaar_id:str, db:Session=Depends(get_db)):
     user = curd.get_user(db, aadhaar_id=aadhaar_id)
     return {
@@ -112,7 +112,7 @@ def user_enroll_otp_issue (aadhaar_id: str, db:Session=Depends(get_db)) :
     print(t.timestamp)
     return t
 
-@app.post("/user/verify/otp/verify", response_model=schema.Result) 
+@app.post("/user/verify/otp/verify", response_model=schema.VerificationResult) 
 def user_enroll_otp_verify (aadhaar_id: str, token:str,  otp:int, db:Session=Depends(get_db)) :
     t = curd.get_otp(db, token)
     choices = ["L","R",]
@@ -127,8 +127,7 @@ def user_enroll_otp_verify (aadhaar_id: str, token:str,  otp:int, db:Session=Dep
     curd.verify_otp(db, token)
     curd.issue_verify_attempt(db,aadhaar_id,seq,token)
     return {
-        "result": True,
-        "sequence" : seq
+        "result": True
     }
 
 @app.post("/user/verify/authenticate")
