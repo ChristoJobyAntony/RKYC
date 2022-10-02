@@ -1,3 +1,4 @@
+from ast import For
 import shutil
 import os
 from uuid import uuid4
@@ -58,7 +59,7 @@ def user_enroll_otp_verify (aadhaar_id: str, token:str,  otp:int, db:Session=Dep
     }
 
 @app.post("/user/enroll/register")
-async def user_enroll_register(aadhaar_id:str, otp_token: str, video: UploadFile = File(), db=Depends(get_db), audio: UploadFile=File()):
+async def user_enroll_register(aadhaar_id:str=Form(), otp_token:str=Form(), video: UploadFile = File(), audio: UploadFile=File(), db=Depends(get_db)):
     otp_data = curd.get_otp(db,token=otp_token)
     if(otp_data.validated != True and otp_data.aadhaar_id == aadhaar_id):
         return HTTPException(status_code=498,detail="The given otp token is not validated")
@@ -67,10 +68,10 @@ async def user_enroll_register(aadhaar_id:str, otp_token: str, video: UploadFile
     video_path_fixed = config.VIDEO_PATH + aadhaar_id + ".webm"
     audio_path_fixed = config.AUDIO_PATH + aadhaar_id + ".wav"
     
-    if video.content_type != "video/webm" :
-        raise HTTPException(status_code=400, detail="Invalid Video File")
-    if audio.content_type != "audio/wav" :
-        raise HTTPException(status_code=400, detail="Invalid Audio File")
+    # if video.content_type != "video/webm" :
+    #     raise HTTPException(status_code=400, detail="Invalid Video File")
+    # if audio.content_type != "audio/wav" :
+    #     raise HTTPException(status_code=400, detail="Invalid Audio File")
     with open(video_path, "wb+") as file_object:
         shutil.copyfileobj(video.file, file_object) 
     with open(audio_path, "wb+") as file_object : 
@@ -79,6 +80,8 @@ async def user_enroll_register(aadhaar_id:str, otp_token: str, video: UploadFile
     os.system(f"ffmpeg -i {audio_path} {audio_path_fixed}")
     os.remove(video_path)
     os.remove(audio_path)
+    video_path = video_path_fixed
+    audio_path = audio_path_fixed
     voiceEmbedder.enroll(audio_path,aadhaar_id)
     face_extractor = face_orient.FaceFile(video_path,save_path=config.FACE_PATH + aadhaar_id + ".png")
     orientations = face_extractor.process_input()
@@ -114,7 +117,7 @@ def user_enroll_otp_verify (aadhaar_id: str, token:str,  otp:int, db:Session=Dep
     }
 
 @app.post("/user/verify/verify")
-async def read_root(aadhaar_id:str, otp_token: str, video: UploadFile = File(), db=Depends(get_db), audio: UploadFile=File()):
+async def read_root(aadhaar_id:str=Form(), otp_token:str=Form(), video: UploadFile = File(), db=Depends(get_db), audio: UploadFile=File()):
     otp_data = curd.get_otp(db,token=otp_token)
     user_data = curd.get_user(db,aadhaar_id=aadhaar_id)
     if(otp_data.validated != True and otp_data.aadhaar_id == aadhaar_id):
@@ -125,10 +128,10 @@ async def read_root(aadhaar_id:str, otp_token: str, video: UploadFile = File(), 
     audio_path = config.AUDIO_PATH + aadhaar_id + "-b" + ".wav"
     video_path_fixed = config.VIDEO_PATH + aadhaar_id + ".webm"
     audio_path_fixed = config.AUDIO_PATH + aadhaar_id + ".wav"
-    if video.content_type != "video/webm" :
-        raise HTTPException(status_code=400, detail="Invalid Video File")
-    if audio.content_type != "audio/wav" :
-        raise HTTPException(status_code=400, detail="Invalid Audio File")
+    # if video.content_type != "video/webm" :
+    #     raise HTTPException(status_code=400, detail="Invalid Video File")
+    # if audio.content_type != "audio/wav" :
+    #     raise HTTPException(status_code=400, detail="Invalid Audio File")
     with open(video_path, "wb+") as file_object:
         shutil.copyfileobj(video.file, file_object) 
     with open(audio_path, "wb+") as file_object : 
@@ -137,6 +140,8 @@ async def read_root(aadhaar_id:str, otp_token: str, video: UploadFile = File(), 
     os.system(f"ffmpeg -i {audio_path} {audio_path_fixed}")
     os.remove(video_path)
     os.remove(audio_path)
+    video_path = video_path_fixed
+    audio_path = audio_path_fixed
     voice_score = voiceEmbedder.compare(audio_path,aadhaar_id)
     face_extractor = face_orient.FaceFile(video_path,save_path=config.FACE_COMPARE_PATH + aadhaar_id + ".png")
     orientations = face_extractor.process_input()
